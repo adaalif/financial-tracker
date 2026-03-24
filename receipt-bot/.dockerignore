@@ -1,0 +1,23 @@
+# Git
+.git
+.gitignore
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment Layouts
+.venv/
+venv/
+env/
+
+# Secrets (NEVER bundle these, rely on Volume or Env mounts)
+.env
+credentials.json
+
+# Cache & Local Files
+.pytest_cache/
+tests/
+groq_debug_output.txt

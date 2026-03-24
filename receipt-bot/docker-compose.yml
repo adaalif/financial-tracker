@@ -1,0 +1,12 @@
+services:
+  receipt-bot:
+    build: .
+    container_name: receipt-bot
+    restart: unless-stopped
+    # Automatically pass all host .env variables explicitly mapped inside the container securely
+    env_file:
+      - .env
+    volumes:
+      # Inject the Google Service Account json securely without hardbaking it directly into the container image
+      # The :ro flag asserts this file layout is physically strictly read-only for the bot.
+      - ./credentials.json:/app/credentials.json:ro

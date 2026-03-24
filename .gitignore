@@ -1,0 +1,22 @@
+# Environments
+.env
+.venv/
+venv/
+env/
+ENV/
+
+# Secrets & Logs
+credentials.json
+groq_debug_output.txt
+
+# Python Caching
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# IDEs & OS Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
