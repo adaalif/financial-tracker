@@ -1,0 +1,9 @@
+{
+    "custom_tables": [
+        "Food",
+        "Transport",
+        "Groceries",
+        "Shopping",
+        "Entertainment"
+    ]
+}

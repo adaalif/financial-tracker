@@ -1,0 +1,29 @@
+[
+    {
+        "merchant": "Warung Pasta @ KEMANG",
+        "date": "2015-11-16",
+        "total": 92400.0,
+        "currency": "IDR",
+        "tax": 0.0,
+        "items": [
+            {
+                "name": "Cheezy Freezy M",
+                "price": 25000.0
+            },
+            {
+                "name": "Red Bull M",
+                "price": 25000.0
+            },
+            {
+                "name": "Lemon Tea",
+                "price": 11000.0
+            },
+            {
+                "name": "Cappucino Frozen",
+                "price": 19000.0
+            }
+        ],
+        "category": "food",
+        "table_name": "Food"
+    }
+]

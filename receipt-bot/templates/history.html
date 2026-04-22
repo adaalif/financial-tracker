@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>History — Financial Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/base.css">
+  <link rel="stylesheet" href="/static/history.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(37, 36, 34, 0.6);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-box {
+      background: var(--bg-card, #fff);
+      border: 3px solid var(--carbon-black, #252422);
+      box-shadow: 8px 8px 0px var(--spicy-paprika, #eb5e28);
+      padding: 2.5rem;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+    }
+    .modal-box h2 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .modal-box p {
+      font-size: 0.9rem;
+      color: var(--charcoal-brown, #403d39);
+      margin-bottom: 1.75rem;
+      line-height: 1.5;
+    }
+    .modal-box .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+    .modal-box .modal-actions .btn { flex: 1; }
+    .btn-danger {
+      background: var(--spicy-paprika, #eb5e28);
+      color: var(--floral-white, #fffcf2);
+      border: 2px solid var(--carbon-black, #252422);
+      box-shadow: var(--shadow-btn);
+    }
+  </style>
+</head>
+<body>
+  {% set active_tab = 'history' %}
+  {% include 'navbar.html' %}
+
+  <div class="container" style="max-width: 1100px;">
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <h1 class="font-display font-extrabold text-3xl tracking-tight text-carbon-black uppercase" style="margin: 0;">All Expenses</h1>
+        <div style="display: flex; gap: 0.75rem; align-items: center;">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search items, merchants..."
+            style="min-width: 260px; padding: 0.6rem 1rem; font-size: 0.85rem;"
+          >
+          <a href="/add" class="btn btn-primary btn-sm" style="white-space: nowrap; width: auto;">+ Add Manual</a>
+        </div>
+      </div>
+
+      {% if not items %}
+      <div class="empty-state">
+        <span class="empty-icon" style="font-size: 2.5rem; opacity: 0.4;">--</span>
+        <h3>No expenses tracked yet</h3>
+        <p>Scan a receipt or add an entry manually to get started.</p>
+        <div style="display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.5rem;">
+          <a href="/scan" class="btn btn-primary btn-sm" style="width: auto;">Scan Receipt</a>
+          <a href="/add" class="btn btn-outline btn-sm" style="width: auto;">Add Manual</a>
+        </div>
+      </div>
+      {% else %}
+
+      <div class="table-wrapper">
+        <table class="data-table" id="dataTable">
+          <thead>
+            <tr>
+              <th class="sortable" data-col="0" data-type="string">Date</th>
+              <th class="sortable" data-col="1" data-type="string">Merchant</th>
+              <th class="sortable" data-col="2" data-type="string">Item</th>
+              <th class="sortable" data-col="3" data-type="string">Category</th>
+              <th class="sortable" data-col="4" data-type="number" style="text-align: right;">Price</th>
+              <th style="text-align: center; width: 80px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            {% for row in items %}
+            <tr data-id="{{ row.id }}">
+              <td>{{ row.date }}</td>
+              <td>{{ row.merchant or '—' }}</td>
+              <td style="font-weight: 500;">{{ row.item_name }}</td>
+              <td><span class="badge">{{ row.category }}</span></td>
+              <td style="text-align: right; color: var(--spicy-paprika); font-weight: 600;">
+                {{ row.currency }} {{ "{:,.0f}".format(row.item_price).replace(',', '.') }}
+              </td>
+              <td style="text-align: center;">
+                <div style="display: flex; gap: 0.35rem; justify-content: center;">
+                  <a href="/edit/{{ row.id }}" class="btn btn-outline btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; width: auto; box-shadow: 1px 1px 0px var(--carbon-black);">Edit</a>
+                  <button type="button" class="btn btn-outline btn-sm delete-trigger" data-id="{{ row.id }}" data-name="{{ row.item_name }}" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; width: auto; box-shadow: 1px 1px 0px var(--carbon-black); border-color: var(--spicy-paprika); color: var(--spicy-paprika);">Del</button>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <p style="font-size: 0.8rem; color: var(--charcoal-brown); font-weight: 600;">
+          Showing <span id="rowCount">{{ items | length }}</span> entries
+        </p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+      <h2>Delete Item</h2>
+      <p>Are you sure you want to permanently delete "<strong id="modalItemName"></strong>"? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="modalCancelBtn">Cancel</button>
+        <button class="btn btn-danger" id="modalConfirmBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/history.js"></script>
+</body>
+</html>

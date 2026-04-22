@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Expense — Financial Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/base.css">
+  <link rel="stylesheet" href="/static/preview.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  {% set active_tab = 'add' %}
+  {% include 'navbar.html' %}
+
+  <div class="container">
+    <div class="card">
+      <h1 class="font-display font-extrabold text-3xl mb-2 tracking-tight text-center text-carbon-black uppercase">Add Expense</h1>
+      <p class="text-center mb-6" style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.875rem;">Enter items manually without scanning a receipt</p>
+
+      <form action="/add" method="post" id="addForm">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="merchant">Merchant / Store</label>
+            <input type="text" id="merchant" name="merchant" placeholder="e.g. Indomaret">
+          </div>
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="currency">Currency</label>
+          <input type="text" id="currency" name="currency" value="IDR" style="max-width: 120px;">
+        </div>
+
+        <div class="items-section">
+          <h3>Line Items</h3>
+          <div id="itemsList">
+            <div class="item-row">
+              <input type="text" name="item_names" placeholder="Item name" required>
+              <input type="number" name="item_prices" step="0.01" placeholder="Price">
+              <input type="text" name="item_categories" list="categories_list" placeholder="Category">
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline" id="addItemBtn" style="margin-top: 0.75rem;">
+            + Add Row
+          </button>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+          <a href="/history" class="btn btn-outline" style="flex: 1;">Cancel</a>
+          <button type="submit" class="btn btn-success" style="flex: 2;">
+            Save to Database
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Datalist provides combo-box behavior: dropdown of existing + free text input -->
+  <datalist id="categories_list">
+    {% for cat in categories %}
+      <option value="{{ cat }}">
+    {% endfor %}
+  </datalist>
+
+  <script src="/static/js/add.js"></script>
+  <script src="/static/js/category-dropdown.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Receipt — Financial Tracker</title>
+  <meta name="description" content="Upload receipt images for AI-powered expense extraction">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/base.css">
+  <link rel="stylesheet" href="/static/upload.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  {% set active_tab = 'scan' %}
+  {% include 'navbar.html' %}
+
+  <div class="container">
+    <div class="card">
+      <h1 class="font-display font-extrabold text-3xl mb-2 tracking-tight text-center text-carbon-black uppercase">Scan Receipt</h1>
+      <p class="text-center mb-6" style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.875rem;">Upload a receipt image to extract expense data</p>
+
+      {% if error %}
+      <div class="alert alert-error">
+        <span>⚠️</span>
+        <span>{{ error }}</span>
+      </div>
+      {% endif %}
+
+      <form action="/api/scan" method="post" enctype="multipart/form-data" id="uploadForm">
+        <div class="file-upload" id="dropZone">
+          <input type="file" name="file" id="fileInput" accept="image/*" required>
+          <span class="file-upload-icon">📷</span>
+          <div class="file-upload-text">Click or drag to upload</div>
+          <div class="file-upload-hint">JPG, PNG, or WEBP — max 10MB</div>
+          <div class="file-name" id="fileName" style="display:none;"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submitBtn">
+          <span class="btn-text">Analyze Receipt</span>
+          <span class="spinner"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const fileName = document.getElementById('fileName');
+    const form = document.getElementById('uploadForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        fileName.textContent = fileInput.files[0].name;
+        fileName.style.display = 'block';
+        dropZone.classList.add('has-file');
+      }
+    });
+
+    form.addEventListener('submit', () => {
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+    });
+  </script>
+</body>
+</html>

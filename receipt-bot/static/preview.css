@@ -1,0 +1,26 @@
+/* ─── Preview Specific CSS ─── */
+.items-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 3px solid var(--carbon-black);
+}
+
+.items-section h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--carbon-black);
+  margin-bottom: 1rem;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .item-row { grid-template-columns: 1fr; gap: 0.75rem; }
+}

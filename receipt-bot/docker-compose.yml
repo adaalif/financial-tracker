@@ -1,12 +1,27 @@
 services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: receipt-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: receipts
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   receipt-bot:
     build: .
     container_name: receipt-bot
     restart: unless-stopped
-    # Automatically pass all host .env variables explicitly mapped inside the container securely
+    depends_on:
+      - postgres
     env_file:
       - .env
     volumes:
-      # Inject the Google Service Account json securely without hardbaking it directly into the container image
-      # The :ro flag asserts this file layout is physically strictly read-only for the bot.
       - ./credentials.json:/app/credentials.json:ro
+
+volumes:
+  postgres_data:

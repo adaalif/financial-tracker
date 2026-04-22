@@ -1,0 +1,24 @@
+<nav class="flex items-center justify-between px-8 py-4 bg-white border-b border-slate-200 sticky top-0 z-50" style="margin: 0; width: 100%;">
+  <div class="flex items-center gap-8">
+    <a href="/" class="flex items-center gap-2" style="text-decoration:none;">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm" style="background-color: #252422; color: #fffcf2;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2Z"></path><path d="M22 13h-4"></path><path d="M18 10a3 3 0 0 0-3 3v0a3 3 0 0 0 3 3"></path></svg>
+      </div>
+      <span class="font-bold text-xl tracking-tight" style="color: #252422; font-family: 'Bricolage Grotesque', sans-serif;">FinTrack</span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm font-bold uppercase tracking-widest" style="font-family: 'Bricolage Grotesque', sans-serif;">
+      <a href="/" class="transition-colors {% if active_tab == 'dashboard' %}text-[#eb5e28]{% else %}text-slate-500 hover:text-[#252422]{% endif %}" style="text-decoration:none;">Dashboard</a>
+      <a href="/scan" class="transition-colors {% if active_tab == 'scan' %}text-[#eb5e28]{% else %}text-slate-500 hover:text-[#252422]{% endif %}" style="text-decoration:none;">Scan Receipt</a>
+      <a href="/add" class="transition-colors {% if active_tab == 'add' %}text-[#eb5e28]{% else %}text-slate-500 hover:text-[#252422]{% endif %}" style="text-decoration:none;">Add Manual</a>
+      <a href="/history" class="transition-colors {% if active_tab == 'history' %}text-[#eb5e28]{% else %}text-slate-500 hover:text-[#252422]{% endif %}" style="text-decoration:none;">History</a>
+    </div>
+  </div>
+  
+  <div class="flex items-center gap-5 text-slate-500">
+    <button class="hover:text-[#252422] transition bg-transparent border-none cursor-pointer p-0 m-0 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+    <button class="hover:text-[#252422] relative transition bg-transparent border-none cursor-pointer p-0 m-0 flex items-center justify-center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span class="absolute top-0 right-0 w-2 h-2 rounded-full border border-white" style="background-color: #eb5e28;"></span>
+    </button>
+  </div>
+</nav>

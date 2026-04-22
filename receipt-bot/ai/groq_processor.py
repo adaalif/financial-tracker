@@ -23,20 +23,20 @@ Return STRICT JSON only:
   "merchant": "string",
   "date": "YYYY-MM-DD",
   "total": 0.0,
-  "currency": "string",
+  "currency": "IDR",
   "tax": 0.0,
-  "items": [{"name": "item", "price": 0.0}],
-  "category": "groceries/transport/food/entertainment/general"
+  "items": [{"name": "item", "price": 0.0, "category": "groceries/transport/food/entertainment/general"}]
 }
 
 Rules:
 - No explanations or extra text
 - Do NOT guess unclear values (use empty string "" or 0)
 - Normalize numbers (no currency symbols)
-- Detect currency (IDR, USD, etc.)
+- CRITICAL FOR CURRENCY: Remove ALL dots (.) and commas (,) from numbers entirely! Indonesian and European formatting uses punctuation for thousands. For example, `25.000` MUST be `25000`. `45,000` MUST be `45000`. `45,000.00` MUST be `45000`. Never include dots or commas in your numerical JSON outputs.
+- Default currency to IDR unless explicitly stated otherwise
 - Prefer final payable total
 - Keep item names short
-- Infer a simple category (food, groceries, transport, shopping, bills)
+- Infer a specific category (food, groceries, electronics, bills, etc) explicitly for EACH sub-item
 - Ensure valid JSON at all times
 """
 

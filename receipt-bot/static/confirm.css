@@ -1,0 +1,8 @@
+/* ─── Confirm Page Specifics ─── */
+.receipt-summary {
+  background: var(--floral-white);
+  border: 3px solid var(--carbon-black);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 4px 4px 0px var(--dust-grey);
+}

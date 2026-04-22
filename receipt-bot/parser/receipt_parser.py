@@ -10,6 +10,11 @@ logger = get_logger(__name__)
 class ReceiptItem(BaseModel):
     name: str = Field(default="")
     price: float = Field(default=0.0)
+    category: str = Field(default="general")
+
+    @property
+    def price_cents(self) -> int:
+        return int(self.price * 100)
 
 class ReceiptData(BaseModel):
     """Strict JSON schema enforcing the exact structure Groq must respond with."""
@@ -19,7 +24,10 @@ class ReceiptData(BaseModel):
     currency: str = Field(default="")
     tax: float = Field(default=0.0)
     items: List[ReceiptItem] = Field(default_factory=list)
-    category: str = Field(default="")
+
+    @property
+    def total_cents(self) -> int:
+        return int(self.total * 100)
 
 def extract_json_from_markdown(raw_text: str) -> str:
     """Strips markdown code blocks and reasoning blocks if present."""
@@ -57,7 +65,6 @@ def regex_fallback_extraction(raw_str: str) -> ReceiptData:
     logger.info("Executing regex fallback extraction")
     receipt = ReceiptData()
     
-    # 1. Try to find Total (e.g. Total: 100.00, AMOUNT $45)
     total_match = re.search(r"(?i)(?:total|amount|sum|paid).*?([\d.,]+)", raw_str)
     if total_match:
         try:
@@ -66,7 +73,6 @@ def regex_fallback_extraction(raw_str: str) -> ReceiptData:
         except ValueError:
             pass
 
-    # 2. Try to find Date (e.g. 2026-03-24, 03/24/2026)
     date_match = re.search(r"\b(\d{2,4}[-/]\d{2}[-/]\d{2,4})\b", raw_str)
     if date_match:
         receipt.date = date_match.group(1)
@@ -74,17 +80,15 @@ def regex_fallback_extraction(raw_str: str) -> ReceiptData:
     return receipt
 
 def format_receipt_row_for_sheets(data: ReceiptData) -> list[list]:
-    """Flattens a ReceiptData object into a single row array for Google Sheets.
-    The items are beautifully formatted with newlines into a single bulleted cell list."""
+    """Flattens a ReceiptData object into a single row array for Google Sheets."""
     merchant = data.merchant or ""
     date = data.date or ""
     total = data.total if data.total is not None else 0.0
-    category = data.category or ""
     
     if data.items:
-        structured_items_list = [f"• {item.name}: {item.price}" for item in data.items if item.name]
+        structured_items_list = [f"• {item.name} ({item.category}): {item.price}" for item in data.items if item.name]
         items_cell_str = "\n".join(structured_items_list)
     else:
         items_cell_str = ""
         
-    return [[merchant, date, total, items_cell_str, category]]
+    return [[merchant, date, total, items_cell_str, "mixed"]]
