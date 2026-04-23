@@ -1,5 +1,8 @@
 # Financial Tracker Web App & AI Receipt Scanner
 
+<img width="1906" height="906" alt="image" src="https://github.com/user-attachments/assets/69181222-fd39-4a2d-9d54-308027ac2b10" />
+
+
 A comprehensive, unified application for end-to-end multi-currency expense management. Built on an SQL backend, this application allows users to process receipt images with extreme accuracy through an AI multimodal pipeline, alongside managing a complete enterprise-grade history ledger, manual entry pipelines, and category normalization directly from a dynamic interactive Web frontend.
 
 ## Key Features
